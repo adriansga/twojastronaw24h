@@ -7,6 +7,115 @@
     <title>Stronaw24h - Profesjonalna Strona WWW w 7 dni | Hosting 0 zł</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style_nowy.css">
+    <style>
+        /* === EXIT INTENT POPUP === */
+        .exit-popup {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .exit-popup.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .exit-popup-box {
+            background: #1a1a1a;
+            border: 2px solid #27AE60;
+            border-radius: 16px;
+            padding: 48px 40px 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(39,174,96,0.35);
+            animation: popupIn 0.45s ease-out;
+        }
+        @keyframes popupIn {
+            0%   { transform: scale(0.6); opacity: 0; }
+            65%  { transform: scale(1.04); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .exit-popup-close {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            font-size: 22px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+            line-height: 1;
+        }
+        .exit-popup-close:hover { color: #27AE60; transform: rotate(90deg); }
+        .exit-popup-icon { font-size: 3.2rem; margin-bottom: 14px; }
+        .exit-popup-box h2 {
+            color: #27AE60;
+            font-size: 1.7rem;
+            margin-bottom: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+        .exit-popup-box > p {
+            color: #a0a0a0;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .exit-popup-box > p strong { color: #27AE60; }
+        .exit-popup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .exit-popup-form input {
+            padding: 14px 16px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        .exit-popup-form input:focus { border-color: #27AE60; }
+        .exit-popup-form button {
+            padding: 15px;
+            background: #27AE60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .exit-popup-form button:hover { background: #219a52; box-shadow: 0 5px 20px rgba(39,174,96,0.4); }
+        .exit-popup-status { font-size: 0.95rem; min-height: 20px; }
+        .exit-popup-status.success { color: #27AE60; }
+        .exit-popup-trust {
+            color: #555;
+            font-size: 0.8rem;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #222;
+        }
+        @media (max-width: 480px) {
+            .exit-popup-box { padding: 40px 24px 28px; }
+            .exit-popup-box h2 { font-size: 1.4rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -19,7 +128,7 @@
     <!-- NAVIGATION -->
     <nav class="navbar">
         <div class="container">
-            <a href="#" class="logo">Strony<span>w24h</span></a>
+            <a href="#" class="logo">Strona<span>w24h</span></a>
             <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
                 <span></span><span></span><span></span>
             </button>
@@ -588,6 +697,24 @@
         </div>
     </div>
 
+    <!-- EXIT INTENT POPUP -->
+    <div class="exit-popup" id="exitPopup">
+        <div class="exit-popup-box">
+            <button class="exit-popup-close" id="exitPopupClose" aria-label="Zamknij">&#10005;</button>
+            <div class="exit-popup-icon">🎁</div>
+            <h2>Poczekaj — masz darmową wycenę!</h2>
+            <p>Zostaw email, a w <strong>24h</strong> wyślemy Ci 3 projekty wyglądu strony + bezpłatną wycenę. Zero zobowiązań.</p>
+            <form class="exit-popup-form" id="exitPopupForm" action="https://formspree.io/f/xzdagzen" method="POST">
+                <input type="hidden" name="_subject" value="🎁 Exit Popup - zapytanie o wycenę">
+                <input type="text" name="name" placeholder="Twoje imię" required>
+                <input type="email" name="email" placeholder="Twój email" required>
+                <button type="submit">Wyślij mi bezpłatną wycenę →</button>
+            </form>
+            <div class="exit-popup-status" id="exitPopupStatus"></div>
+            <p class="exit-popup-trust">✓ Bez spamu &nbsp;|&nbsp; ✓ Wycena w 24h &nbsp;|&nbsp; ✓ Zero zobowiązań</p>
+        </div>
+    </div>
+
     <script src="script_nowy.js"></script>
     <script>
         // === COOKIES CONSENT ===
@@ -642,6 +769,63 @@
 
         // Sprawdź zgodę przy załadowaniu strony
         window.addEventListener('load', checkCookieConsent);
+
+        // === EXIT INTENT POPUP ===
+        (function() {
+            const popup = document.getElementById('exitPopup');
+            const closeBtn = document.getElementById('exitPopupClose');
+            const form = document.getElementById('exitPopupForm');
+            const status = document.getElementById('exitPopupStatus');
+            let shown = false;
+
+            function showPopup() {
+                if (shown || sessionStorage.getItem('exitPopupShown')) return;
+                shown = true;
+                sessionStorage.setItem('exitPopupShown', '1');
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hidePopup() {
+                popup.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            document.addEventListener('mouseleave', function(e) {
+                if (e.clientY <= 0) showPopup();
+            });
+
+            closeBtn.addEventListener('click', hidePopup);
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) hidePopup();
+            });
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                btn.textContent = 'Wysyłam...';
+                btn.disabled = true;
+                try {
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (res.ok) {
+                        status.className = 'exit-popup-status success';
+                        status.textContent = '✓ Gotowe! Sprawdź skrzynkę — odezwiemy się w ciągu 24h.';
+                        form.reset();
+                        setTimeout(hidePopup, 3000);
+                    } else {
+                        throw new Error();
+                    }
+                } catch {
+                    btn.textContent = 'Wyślij mi bezpłatną wycenę →';
+                    btn.disabled = false;
+                    status.textContent = 'Coś poszło nie tak. Spróbuj ponownie.';
+                }
+            });
+        })();
     </script>
 </body>
 </html>
