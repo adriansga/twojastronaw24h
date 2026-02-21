@@ -803,6 +803,94 @@ section {
     color: var(--text-gray);
 }
 
+/* ===== KONTAKT SECTION ===== */
+.kontakt {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f1f15 100%);
+}
+
+.kontakt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.kontakt-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 35px 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.kontakt-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(39, 174, 96, 0.15);
+}
+
+.kontakt-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.kontakt-icon i {
+    color: var(--primary);
+    display: block;
+}
+
+.kontakt-card h3 {
+    margin-bottom: 10px;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.kontakt-card p {
+    color: var(--text-gray);
+    margin-bottom: 8px;
+}
+
+.kontakt-card p a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.kontakt-card p a:hover {
+    color: var(--primary);
+}
+
+.kontakt-hours {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 12px;
+}
+
+.kontakt-cta {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.kontakt-cta .cta-primary.large,
+.kontakt-cta .cta-secondary.large {
+    min-width: 250px;
+    text-align: center;
+}
+
+.kontakt-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.kontakt-card-link:hover {
+    text-decoration: none;
+}
+
 /* ===== GWARANCJE SECTION ===== */
 .gwarancje {
     background: linear-gradient(135deg, #1a1a1a 0%, #1a0f0f 50%, #0f1f15 100%);
@@ -1510,6 +1598,15 @@ section {
 
     .gwarancje-grid {
         grid-template-columns: 1fr;
+    }
+
+    .kontakt-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .kontakt-cta {
+        flex-direction: column;
+        align-items: center;
     }
 
     .urgency-bar {
