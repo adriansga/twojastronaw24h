@@ -2,6 +2,32 @@
 let currentStep = 0;
 let totalCena = 2000;
 
+// ===== PORTFOLIO EXPAND =====
+function initPortfolioExpand() {
+    const expandBtn = document.getElementById('portfolioExpandBtn');
+    const portfolioGrid = document.querySelector('.portfolio-grid');
+    
+    if (!expandBtn || !portfolioGrid) return;
+    
+    expandBtn.addEventListener('click', () => {
+        const isExpanded = portfolioGrid.classList.contains('expanded');
+        
+        if (isExpanded) {
+            portfolioGrid.classList.remove('expanded');
+            expandBtn.classList.remove('expanded');
+            expandBtn.querySelector('span').textContent = 'Zobacz więcej realizacji';
+            expandBtn.querySelector('i').classList.remove('fa-chevron-up');
+            expandBtn.querySelector('i').classList.add('fa-chevron-down');
+        } else {
+            portfolioGrid.classList.add('expanded');
+            expandBtn.classList.add('expanded');
+            expandBtn.querySelector('span').textContent = 'Zwiń';
+            expandBtn.querySelector('i').classList.remove('fa-chevron-down');
+            expandBtn.querySelector('i').classList.add('fa-chevron-up');
+        }
+    });
+}
+
 // ===== HAMBURGER MENU =====
 function toggleMenu() {
     const hamburger = document.querySelector('.hamburger');
@@ -170,6 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(card);
     });
+    
+    // Initialize portfolio expand functionality
+    initPortfolioExpand();
 });
 
 // ===== LOADING STATE (dla formularzy) =====
