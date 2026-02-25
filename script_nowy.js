@@ -1,6 +1,18 @@
-// ===== GLOBAL VARIABLES =====
-let currentStep = 0;
-let totalCena = 2000;
+// ===== INLINE TOAST (zamiast alert) =====
+function showInlineToast(message, type) {
+    let toast = document.getElementById('inlineToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'inlineToast';
+        toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#27AE60;color:#fff;padding:14px 24px;border-radius:50px;font-size:0.95rem;font-weight:600;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:opacity 0.4s;pointer-events:none;';
+        document.body.appendChild(toast);
+    }
+    toast.style.background = (type === 'error') ? '#e74c3c' : '#27AE60';
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => { toast.style.opacity = '0'; }, 4000);
+}
 
 // ===== PORTFOLIO EXPAND =====
 function initPortfolioExpand() {
@@ -97,11 +109,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // ===== SOCIAL PROOF TOASTS =====
 const socialProofMessages = [
-    { text: "Klient z Krakow poprosil o wycene", icon: "\uD83D\uDCCB" },
-    { text: "Nowa realizacja w Warszawa zakonczona", icon: "\uD83C\uDFE0" },
-    { text: "Ktos wlasnie zadzwonil w sprawie strony", icon: "\uD83D\uDCDE" },
-    { text: "Klient z Gdansk zamowil strone", icon: "\u2705" },
-    { text: "Nowa wycena wyslana do klienta", icon: "\uD83D\uDCE7" },
+    { text: "Ktoś z {city} poprosił o wycenę strony", icon: "📋" },
+    { text: "Nowe zapytanie od firmy z {city}", icon: "📩" },
+    { text: "Ktoś właśnie zadzwonił w sprawie strony", icon: "📞" },
+    { text: "Właściciel firmy z {city} wypełnił brief", icon: "✅" },
+    { text: "Nowy klient z {city} — realizacja w toku", icon: "🏠" },
 ];
 
 const socialProofTimes = [
@@ -136,7 +148,7 @@ function showSocialProof() {
     const time = socialProofTimes[Math.floor(Math.random() * socialProofTimes.length)];
     const city = socialProofCities[Math.floor(Math.random() * socialProofCities.length)];
 
-    textEl.textContent = msg.text.replace('Krakow', city).replace('Warszawa', city).replace('Gdansk', city);
+    textEl.textContent = msg.text.replace('{city}', city);
     timeEl.textContent = time;
     toast.querySelector('.toast-icon').textContent = msg.icon;
 
@@ -145,12 +157,14 @@ function showSocialProof() {
     socialProofCount++;
 
     // Schowaj po TOAST_DURATION
-    setTimeout(() => {
+    clearTimeout(socialProofTimer);
+    socialProofTimer = setTimeout(() => {
         toast.classList.remove('show');
 
         // Zaplanuj nastepne
         if (socialProofCount < MAX_TOASTS) {
             const nextDelay = NEXT_DELAY_MIN + Math.random() * (NEXT_DELAY_MAX - NEXT_DELAY_MIN);
+            clearTimeout(socialProofTimer);
             socialProofTimer = setTimeout(showSocialProof, nextDelay);
         }
     }, TOAST_DURATION);
@@ -212,8 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolioExpand();
 });
 
-// ===== LOADING STATE (dla formularzy) =====
-document.querySelectorAll('form').forEach(form => {
+// ===== LOADING STATE (dla formularzy, nie dotyczy exit popup) =====
+document.querySelectorAll('form:not(#exitPopupForm)').forEach(form => {
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -221,11 +235,10 @@ document.querySelectorAll('form').forEach(form => {
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
 
-            // Symulacja wysylania (w prawdziwej aplikacji: fetch/AJAX)
             setTimeout(() => {
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
-                alert('\u2705 Wiadomosc wyslana! Odezwiemy sie w ciagu 24h.');
+                showInlineToast('✅ Wiadomość wysłana! Odezwiemy się w ciągu 24h.', 'success');
                 form.reset();
             }, 2000);
         }
@@ -235,10 +248,15 @@ document.querySelectorAll('form').forEach(form => {
 // ===== COUNTDOWN TIMER (urgency bar, 72h z localStorage) =====
 (function() {
     const key = 's24hUrgencyDeadline';
-    let deadline = localStorage.getItem(key);
-    if (!deadline) {
+    let deadline;
+    try {
+        deadline = localStorage.getItem(key);
+        if (!deadline) {
+            deadline = Date.now() + 72 * 60 * 60 * 1000;
+            localStorage.setItem(key, deadline);
+        }
+    } catch(e) {
         deadline = Date.now() + 72 * 60 * 60 * 1000;
-        localStorage.setItem(key, deadline);
     }
     const el = document.getElementById('urgencyCountdown');
     if (!el) return;
@@ -284,7 +302,5 @@ document.addEventListener('keydown', function(e) {
     sections.forEach(s => obs.observe(s));
 })();
 
-// ===== CONSOLE INFO =====
-console.log('%c\uD83D\uDE80 Strony24h - Twoja strona w 24 godziny', 'font-size: 20px; font-weight: bold; color: #27AE60;');
-console.log('%cHosting 0 zl \u2022 Mobile-first \u2022 100% wlasnosc', 'font-size: 14px; color: #888;');
-console.log('Kontakt: kontakt@twojastronaw24h.pl');
+// ===== DEV INFO =====
+// console.log('%c🚀 Stronaw24h', 'font-size:16px;font-weight:bold;color:#27AE60;');

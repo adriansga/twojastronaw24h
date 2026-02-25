@@ -10,6 +10,11 @@
     <title>Stronaw24h | Profesjonalna Strona WWW w 7 dni — od 2 000 zł | Hosting 0 zł</title>
     <link rel="canonical" href="https://twojastronaw24h.pl/">
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+    <!-- Preconnect do zewnętrznych zasobów (wydajność) -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://formspree.io">
+    <link rel="dns-prefetch" href="https://www.clarity.ms">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:locale" content="pl_PL">
@@ -174,7 +179,7 @@
         }
         .exit-popup-close {
             position: absolute;
-            top: 14px; right: 16px;
+            top: 8px; right: 8px;
             background: none;
             border: none;
             color: #a0a0a0;
@@ -182,6 +187,11 @@
             cursor: pointer;
             transition: color 0.2s, transform 0.2s;
             line-height: 1;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .exit-popup-close:hover { color: #27AE60; transform: rotate(90deg); }
         .exit-popup-icon { font-size: 3.2rem; margin-bottom: 14px; }
@@ -231,6 +241,8 @@
         .exit-popup-form button:hover { background: #219a52; box-shadow: 0 5px 20px rgba(39,174,96,0.4); }
         .exit-popup-status { font-size: 0.95rem; min-height: 20px; }
         .exit-popup-status.success { color: #27AE60; }
+        .exit-popup-status.error { color: #e74c3c; }
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
         .exit-popup-trust {
             color: #555;
             font-size: 0.8rem;
@@ -290,15 +302,15 @@
                 </div>
                 <div class="hero-trust">
                     <div class="trust-item">
-                        <span class="trust-icon"><i class="fa-solid fa-bullseye"></i></span>
+                        <span class="trust-icon"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></span>
                         <span>Specjalizacja: lokalne firmy usługowe</span>
                     </div>
                     <div class="trust-item">
-                        <span class="trust-icon"><i class="fa-solid fa-star"></i></span>
+                        <span class="trust-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
                         <span>Ocena 4.9/5 w Google</span>
                     </div>
                     <div class="trust-item">
-                        <span class="trust-icon"><i class="fa-solid fa-rocket"></i></span>
+                        <span class="trust-icon"><i class="fa-solid fa-rocket" aria-hidden="true"></i></span>
                         <span>Ponad 30 zrealizowanych stron</span>
                     </div>
                 </div>
@@ -1003,10 +1015,12 @@
             <div class="exit-popup-icon">🎁</div>
             <h2 id="exitPopupTitle">Poczekaj — masz darmową wycenę!</h2>
             <p>Zostaw email, a w <strong>24h</strong> wyślemy Ci 3 projekty wyglądu strony + bezpłatną wycenę. Zero zobowiązań.</p>
-            <form class="exit-popup-form" id="exitPopupForm" action="https://formspree.io/f/xzdagzen" method="POST">
+            <form class="exit-popup-form" id="exitPopupForm" action="https://formspree.io/f/xzdagzen" method="POST" novalidate>
                 <input type="hidden" name="_subject" value="🎁 Exit Popup - zapytanie o wycenę">
-                <input type="text" name="name" placeholder="Twoje imię" required>
-                <input type="email" name="email" placeholder="Twój email" required>
+                <label for="exitName" class="sr-only">Imię</label>
+                <input type="text" id="exitName" name="name" placeholder="Twoje imię" required autocomplete="given-name">
+                <label for="exitEmail" class="sr-only">Email</label>
+                <input type="email" id="exitEmail" name="email" placeholder="Twój email" required autocomplete="email">
                 <button type="submit">Wyślij mi bezpłatną wycenę →</button>
             </form>
             <div class="exit-popup-status" id="exitPopupStatus"></div>
@@ -1104,11 +1118,20 @@
                 const btn = form.querySelector('button[type="submit"]');
                 const imie = form.querySelector('input[name="name"]').value.trim();
                 const email = form.querySelector('input[name="email"]').value.trim();
-                btn.textContent = 'Przekierowuję...';
-                btn.disabled = true;
 
-                // Wyślij do Formspree z keepalive - dane zapisują się nawet gdy użytkownik
-                // przejdzie na brief lub zamknie kartę bez wypełniania dalej
+                // Prosta walidacja
+                if (!imie || !email || !email.includes('@')) {
+                    status.textContent = '⚠ Uzupełnij imię i poprawny email.';
+                    status.className = 'exit-popup-status error';
+                    return;
+                }
+
+                btn.textContent = 'Wysyłam...';
+                btn.disabled = true;
+                status.textContent = '';
+                status.className = 'exit-popup-status';
+
+                // Wyślij do Formspree
                 fetch(form.action, {
                     method: 'POST',
                     body: new FormData(form),
@@ -1116,9 +1139,14 @@
                     keepalive: true
                 }).catch(() => {});
 
-                // Przekieruj od razu do briefu z pre-uzupełnionymi danymi
-                const params = new URLSearchParams({ imie, email });
-                window.location.href = 'brief.html?' + params.toString();
+                // Krótkie potwierdzenie → redirect do briefu
+                status.textContent = '✅ Gotowe! Przekierowuję do briefu...';
+                status.className = 'exit-popup-status success';
+
+                setTimeout(() => {
+                    const params = new URLSearchParams({ imie, email });
+                    window.location.href = 'brief.html?' + params.toString();
+                }, 800);
             });
         })();
     </script>

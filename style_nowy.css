@@ -107,9 +107,13 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 5px;
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
     flex-direction: column;
     gap: 5px;
+    align-items: center;
+    justify-content: center;
 }
 
 .hamburger span {
@@ -934,7 +938,7 @@ section {
 
 .kontakt-hours {
     font-size: 0.9rem;
-    color: #666;
+    color: #888;
     margin-top: 12px;
 }
 
