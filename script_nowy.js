@@ -48,20 +48,31 @@ document.querySelectorAll('.nav-menu a').forEach(link => {
     });
 });
 
-// ===== FAQ ACCORDION =====
+// ===== FAQ ACCORDION (z keyboard support i aria-expanded) =====
 document.querySelectorAll('.faq-question').forEach(question => {
-    question.addEventListener('click', () => {
+    function toggleFaq() {
         const faqItem = question.parentElement;
         const isActive = faqItem.classList.contains('active');
 
         // Zamknij wszystkie inne
         document.querySelectorAll('.faq-item').forEach(item => {
             item.classList.remove('active');
+            const q = item.querySelector('.faq-question');
+            if (q) q.setAttribute('aria-expanded', 'false');
         });
 
         // Toggle current
         if (!isActive) {
             faqItem.classList.add('active');
+            question.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    question.addEventListener('click', toggleFaq);
+    question.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleFaq();
         }
     });
 });
@@ -220,6 +231,58 @@ document.querySelectorAll('form').forEach(form => {
         }
     });
 });
+
+// ===== COUNTDOWN TIMER (urgency bar, 72h z localStorage) =====
+(function() {
+    const key = 's24hUrgencyDeadline';
+    let deadline = localStorage.getItem(key);
+    if (!deadline) {
+        deadline = Date.now() + 72 * 60 * 60 * 1000;
+        localStorage.setItem(key, deadline);
+    }
+    const el = document.getElementById('urgencyCountdown');
+    if (!el) return;
+    function tick() {
+        const diff = parseInt(deadline) - Date.now();
+        if (diff <= 0) { el.textContent = '0h 00m 00s'; return; }
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = h + 'h ' + String(m).padStart(2, '0') + 'm ' + String(s).padStart(2, '0') + 's';
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+
+// ===== ESC KEY — zamknij exit popup =====
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const popup = document.getElementById('exitPopup');
+        if (popup && popup.classList.contains('active')) {
+            popup.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+});
+
+// ===== ACTIVE NAV HIGHLIGHT on scroll =====
+(function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-menu a[href^="#"]');
+    if (!sections.length || !navLinks.length) return;
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => link.classList.remove('active-nav'));
+                const active = document.querySelector('.nav-menu a[href="#' + entry.target.id + '"]');
+                if (active) active.classList.add('active-nav');
+            }
+        });
+    }, { threshold: 0.35 });
+
+    sections.forEach(s => obs.observe(s));
+})();
 
 // ===== CONSOLE INFO =====
 console.log('%c\uD83D\uDE80 Strony24h - Twoja strona w 24 godziny', 'font-size: 20px; font-weight: bold; color: #27AE60;');

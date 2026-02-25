@@ -1914,3 +1914,50 @@ section {
 .cookie-policy a:hover {
     text-decoration: underline;
 }
+
+/* ===== PERFORMANCE & ACCESSIBILITY ===== */
+
+/* Dostępność: wyłącz animacje gdy użytkownik tego woli */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .service-card, .benefit-card, .problem-card, .timeline-item,
+    .faq-item, .portfolio-item, .testimonial-card, .gwarancja-card,
+    .comparison-row {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .urgency-dot { animation: none !important; }
+}
+
+/* Wydajność: renderuj sekcje leniwie */
+.problem, .comparison, .solution, .proces, .portfolio,
+.testimonials, .faq, .gwarancje, .cta-final {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+}
+
+/* Płynność animacji przewijania */
+.service-card, .benefit-card, .problem-card, .portfolio-item,
+.testimonial-card, .gwarancja-card {
+    will-change: opacity, transform;
+}
+
+/* Countdown w urgency bar */
+#urgencyCountdown {
+    font-weight: 700;
+    color: #ffd700;
+    letter-spacing: 0.5px;
+}
+
+/* Active nav highlight */
+.nav-menu a.active-nav {
+    color: var(--primary);
+}
+
+/* Dostępność: widoczny focus */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
