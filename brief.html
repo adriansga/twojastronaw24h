@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brief Projektowy - Stronaw24h</title>
+    <title>Brief Projektowy — Wycena w 2 minuty | Stronaw24h</title>
     <meta name="description" content="Wypełnij krótki formularz i otrzymaj 3 projekty wyglądu Twojej strony w 24h. Stronaw24h - profesjonalne strony dla lokalnych firm.">
+    <meta name="robots" content="noindex, follow">
+    <meta name="theme-color" content="#27AE60">
+    <link rel="canonical" href="https://twojastronaw24h.pl/brief.html">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style_nowy.css">
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2327ae60'/><text y='72' x='50' text-anchor='middle' font-size='65' font-family='Arial,sans-serif' font-weight='bold' fill='white'>S</text></svg>">
@@ -165,8 +169,13 @@
     </style>
 </head>
 <body>
+    <!-- PROGRESS BAR FORMULARZA -->
+    <div id="briefProgress" style="position:fixed; top:0; left:0; right:0; z-index:9999; background:#111; height:4px;">
+        <div id="briefProgressBar" style="height:100%; width:0%; background:#27AE60; transition:width 0.4s ease;"></div>
+    </div>
+
     <!-- NAVIGATION -->
-    <nav class="navbar">
+    <nav class="navbar" style="top:4px;">
         <div class="container">
             <a href="index.html" class="logo">Strona<span>w24h</span></a>
             <a href="tel:+48696053282" style="color: var(--text-white); font-weight: 600; margin-right: 16px;">📞 696 053 282</a>
@@ -690,6 +699,31 @@
 
         // Sprawdź zgodę przy załadowaniu strony
         window.addEventListener('load', checkCookieConsent);
+    </script>
+
+    <script>
+        // ===== PROGRESS BAR FORMULARZA =====
+        (function() {
+            const sections = document.querySelectorAll('.brief-section');
+            const bar = document.getElementById('briefProgressBar');
+            if (!sections.length || !bar) return;
+            const total = sections.length;
+            function update() {
+                let filled = 0;
+                sections.forEach(sec => {
+                    const inputs = sec.querySelectorAll('input[required], textarea[required], select[required]');
+                    if (!inputs.length) { filled++; return; }
+                    let allFilled = true;
+                    inputs.forEach(inp => { if (!inp.value.trim()) allFilled = false; });
+                    if (allFilled) filled++;
+                });
+                const pct = Math.round((filled / total) * 100);
+                bar.style.width = pct + '%';
+            }
+            document.getElementById('briefForm').addEventListener('input', update);
+            document.getElementById('briefForm').addEventListener('change', update);
+            update();
+        })();
     </script>
 </body>
 </html>

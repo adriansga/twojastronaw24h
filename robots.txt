@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://twojastronaw24h.pl/sitemap.xml

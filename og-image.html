@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pl">
+<!--
+    OG IMAGE GENERATOR — Stronaw24h
+    ==============================================
+    JAK UŻYĆ:
+    1. Otwórz ten plik w przeglądarce
+    2. Ustaw zoom przeglądarki na 100%
+    3. Zrób screenshot okna (1200x630px)
+    4. Zapisz jako og-image.jpg w tym folderze
+    5. Wrzuć na hosting przez PUSHHOSTING.bat
+    ==============================================
+-->
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 1200px;
+            height: 630px;
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+        .wrap {
+            width: 1200px;
+            height: 630px;
+            background: radial-gradient(ellipse at 20% 50%, #0d1f14 0%, #0a0a0a 70%);
+            display: flex;
+            align-items: center;
+            padding: 0 90px;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Siatka w tle */
+        .wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(39,174,96,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(39,174,96,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+        /* Glow zielony */
+        .glow-left {
+            position: absolute;
+            left: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(39,174,96,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .glow-right {
+            position: absolute;
+            right: 100px;
+            bottom: 60px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(39,174,96,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .logo-mark {
+            font-size: 13px;
+            font-weight: 800;
+            color: #27AE60;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            position: absolute;
+            top: 38px;
+            left: 90px;
+            opacity: 0.7;
+        }
+        .content { position: relative; z-index: 1; max-width: 680px; }
+        .tag {
+            font-size: 12px;
+            font-weight: 700;
+            color: #27AE60;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 26px;
+            display: block;
+            border: 1px solid rgba(39,174,96,0.3);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(39,174,96,0.08);
+        }
+        h1 {
+            font-size: 62px;
+            font-weight: 800;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+        h1 span {
+            color: #27AE60;
+        }
+        p {
+            font-size: 19px;
+            color: #555;
+            line-height: 1.6;
+            max-width: 520px;
+            margin-bottom: 36px;
+        }
+        .badges {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: rgba(39,174,96,0.1);
+            border: 1px solid rgba(39,174,96,0.25);
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-size: 13px;
+            color: #27AE60;
+            font-weight: 600;
+        }
+        .right-panel {
+            position: absolute;
+            right: 90px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            z-index: 1;
+        }
+        .price-box {
+            background: rgba(39,174,96,0.06);
+            border: 1px solid rgba(39,174,96,0.2);
+            border-radius: 20px;
+            padding: 32px 44px;
+            margin-bottom: 18px;
+        }
+        .price-label {
+            font-size: 11px;
+            color: #444;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .price {
+            font-size: 44px;
+            font-weight: 800;
+            color: #fff;
+        }
+        .price span { font-size: 16px; color: #555; }
+        .hosting {
+            font-size: 13px;
+            color: #27AE60;
+            font-weight: 600;
+        }
+        .url {
+            position: absolute;
+            bottom: 36px;
+            left: 90px;
+            font-size: 13px;
+            color: #222;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="glow-left"></div>
+        <div class="glow-right"></div>
+        <span class="logo-mark">STRONAW24H.PL</span>
+
+        <div class="content">
+            <span class="tag">✓ Strona gotowa w 7 dni</span>
+            <h1>Twoi klienci<br><span>szukają Cię</span><br>w Google.</h1>
+            <p>3 projekty wyglądu w 24h. Wybierasz. My robimy resztę.</p>
+            <div class="badges">
+                <div class="badge">od 2 000 zł</div>
+                <div class="badge">Hosting 0 zł</div>
+                <div class="badge">100% Twoja</div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="price-box">
+                <div class="price-label">Pakiet Wizytówka</div>
+                <div class="price">2 000 <span>zł</span></div>
+                <div style="font-size:12px; color:#333; margin-top:6px;">jednorazowo</div>
+            </div>
+            <div class="hosting">+ Hosting 0 zł/rok na zawsze</div>
+        </div>
+
+        <div class="url">twojastronaw24h.pl</div>
+    </div>
+</body>
+</html>
